@@ -1,8 +1,8 @@
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 
@@ -11,6 +11,7 @@ public class AnimationView extends JFrame implements Runnable, ActionListener {
     private StatsPanel statsPanel;
     private ControlPanel controlPanel;
     private Viewer viewer;
+
     private Integer refreshMilis;
 
     private AnimationController animationController;
@@ -58,7 +59,6 @@ public class AnimationView extends JFrame implements Runnable, ActionListener {
         this.setSize(1920, 1080);
         this.setLocation(0, 0);
         this.setVisible(true);
-
     }
 
     // * Getters & Setters
@@ -67,12 +67,21 @@ public class AnimationView extends JFrame implements Runnable, ActionListener {
         this.animationController = animationController;
     }
 
+    public AnimationController getAnimationController() {
+        return animationController;
+    }
+
     public Viewer getViewer() {
         return viewer;
     }
 
     // * Methods
 
+    /**
+     * If there are objects in the list, draw them
+     * 
+     * @param g Graphics object
+     */
     public void refresh(Graphics g) {
         if (animationController.getAnimationModel().getObjectsList().size() > 0) {
             for (AnimatedObject animatedObject : animationController.getAnimationModel().getObjectsList()) {
@@ -83,17 +92,18 @@ public class AnimationView extends JFrame implements Runnable, ActionListener {
         }
     }
 
-    public void play() {
-
-    }
-
     // * Interface Methods
 
+    /**
+     * The function is called when a button is pressed. It checks which button was pressed and calls
+     * the appropriate function in the model
+     * 
+     * @param e the event that triggered the action
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == controlPanel.getbPlay()) {
             animationController.getAnimationModel().play();
-            // play();
         } else if (e.getSource() == controlPanel.getbPause()) {
             animationController.getAnimationModel().pause();
         } else if (e.getSource() == controlPanel.getbStop()) {
@@ -107,6 +117,8 @@ public class AnimationView extends JFrame implements Runnable, ActionListener {
         viewer.createBufferStrategy(2);
 
         while (true) {
+            // The main loop of the program. It is called every `refreshMilis` milliseconds. It draws
+            // the objects on the screen using a double-buffer technique
             BufferStrategy bs = viewer.getBufferStrategy();
             Graphics gg = bs.getDrawGraphics();
 
@@ -124,6 +136,13 @@ public class AnimationView extends JFrame implements Runnable, ActionListener {
                     e.printStackTrace();
                 }
             }
+            // Updating the statistics panel.
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    statsPanel.setStatistics();
+                }
+            });
         }
     }
 }

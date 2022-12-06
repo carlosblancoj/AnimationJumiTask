@@ -18,23 +18,23 @@ public class Gravity extends AnimatedObject{
     @Override
     protected void update() throws InterruptedException {
 
-        this.dirY += 0.1f;
+        dirY += 0.1f;
 
         if (this.getCoordinates().getX() <= 0) {
-            this.dirX = speedX;
+            dirX = speedX;
         } else if(this.getCoordinates().getX() >= super.getAnimationModel().getAnimationController().getAnimationView().getViewer().getWidth() - super.getSizeImage()){
-            this.dirX = -speedX;
+            dirX = -speedX;
         } 
 
         if(this.getCoordinates().getY() <= 0){
-            this.dirY = speedY;
+            dirY = speedY;
         } else if(this.getCoordinates().getY() >= super.getAnimationModel().getAnimationController().getAnimationView().getViewer().getHeight() - super.getSizeImage()){
-            this.speedY *= 0.8f;
-            this.dirY = -speedY; 
+            speedY *= 0.8f;
+            dirY = -speedY; 
         } 
         
-        this.getCoordinates().setX(this.getCoordinates().getX() + Math.round(this.dirX));
-        this.getCoordinates().setY(this.getCoordinates().getY() + Math.round(this.dirY));
-        Thread.sleep(30);
+        this.getCoordinates().setX(this.getCoordinates().getX() + Math.round(dirX));
+        this.getCoordinates().setY(this.getCoordinates().getY() + Math.round(dirY));
+        Thread.sleep(15);
     }
 }

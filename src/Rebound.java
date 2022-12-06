@@ -20,17 +20,17 @@ public class Rebound extends AnimatedObject {
     protected void update() throws InterruptedException {
         // TODO Auto-generated method stub
         if (this.getCoordinates().getX() <= 0) {
-            this.dirX = speedX;
+            dirX = speedX;
         } else if(this.getCoordinates().getX() >= super.getAnimationModel().getAnimationController().getAnimationView().getViewer().getWidth() - super.getSizeImage()){
-            this.dirX = -speedX;
+            dirX = -speedX;
         } else if(this.getCoordinates().getY() <= 0){
-            this.dirY = speedY;
+            dirY = speedY;
         } else if(this.getCoordinates().getY() >= super.getAnimationModel().getAnimationController().getAnimationView().getViewer().getHeight() - super.getSizeImage()){
-            this.dirY = -speedY;
+            dirY = -speedY;
         } 
 
-        this.getCoordinates().setX(this.getCoordinates().getX() + this.dirX);
-        this.getCoordinates().setY(this.getCoordinates().getY() + this.dirY);
+        this.getCoordinates().setX(this.getCoordinates().getX() + dirX);
+        this.getCoordinates().setY(this.getCoordinates().getY() + dirY);
         Thread.sleep(7);
     }
 }

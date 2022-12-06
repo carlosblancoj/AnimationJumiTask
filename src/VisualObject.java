@@ -1,6 +1,4 @@
 import java.awt.Graphics;
-import java.awt.Image;
-import javax.imageio.ImageIO;
 
 public abstract class VisualObject {
 
@@ -24,8 +22,5 @@ public abstract class VisualObject {
 
     // * Methods
 
-    // ! Synchronyzed? meterle la lógica aqui para q se dibuje
-    public synchronized void drawObject(Graphics g) {
-        //g.drawImage(avatar, coordinates.getX(), coordinates.getY(), 50, 50, null);
-    }
+    public synchronized void drawObject(Graphics g) {}
 }

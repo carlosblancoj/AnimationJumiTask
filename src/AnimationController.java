@@ -27,5 +27,4 @@ public class AnimationController {
     public AnimationModel getAnimationModel() {
         return animationModel;
     }
-
 }

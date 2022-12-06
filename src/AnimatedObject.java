@@ -2,13 +2,12 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.awt.Graphics;
-
 import javax.imageio.ImageIO;
 
 public abstract class AnimatedObject extends VisualObject implements Runnable {
 
     private static Image[] objectImages;
-    private static Integer[][] statistics;
+    protected static Integer[][] statistics;
 
     private AnimatedObjectStatus status;
     private ObjectType objectType;
@@ -23,7 +22,6 @@ public abstract class AnimatedObject extends VisualObject implements Runnable {
         super(coordinates);
 
         this.objectType = objectType;
-        this.status = AnimatedObjectStatus.RUNNING;
         this.animationModel = animationModel;
         this.sizeImage = sizeImage;
 
@@ -37,11 +35,19 @@ public abstract class AnimatedObject extends VisualObject implements Runnable {
 
     // * Getters & Setters
 
-    public AnimatedObjectStatus getStatus() {
+    public synchronized AnimatedObjectStatus getStatus() {
         return status;
     }
 
-    public void setStatus(AnimatedObjectStatus status) {
+    /**
+     * "This function updates the statistics and then sets the status."
+     * 
+     * The function is synchronized, so it's thread-safe
+     * 
+     * @param status The status of the object.
+     */
+    public synchronized void setStatus(AnimatedObjectStatus status) {
+        updateStatistics(status);
         this.status = status;
     }
 
@@ -62,27 +68,37 @@ public abstract class AnimatedObject extends VisualObject implements Runnable {
     }
 
     // * Methods
-
-    /*
-     * private void addToStatistics() {
+    
+    /**
+     * This function adds one to the statistics array at the index of the object type and the status
      * 
-     * }
+     * @param status The status of the object.
      */
+    public synchronized void addToStatics(AnimatedObjectStatus status) {
+        statistics[objectType.ordinal()][status.ordinal()]++;
+    }
+    
+    /**
+     * Decrement the number of objects of a certain type that are in a certain state
+     * 
+     * @param status The status of the object.
+     */
+    public synchronized void removeFromStatics(AnimatedObjectStatus status) {
+        statistics[objectType.ordinal()][status.ordinal()]--;
+    }
 
-    public void updateStatistics() {
-
-        int i = 0;
-        boolean stop = false;
-        while (!stop && i < 4) {
-            if (this.objectType.ordinal() == i) {
-                int j = 0;
-                boolean stop2 = false;
-        while (!stop2 && i < 4) {
+    /**
+     * If the status is not null, remove it from the statistics, then add the new status to the
+     * statistics.
+     * 
+     * @param status The status of the object.
+     */
+    public synchronized void updateStatistics(AnimatedObjectStatus status) {
+        AnimatedObjectStatus statusActual = getStatus();
+        if (statusActual != null) {
+            removeFromStatics(statusActual);
         }
-            } else {
-                i++;
-            }
-        }
+        addToStatics(status);
     }
 
     /**
@@ -112,6 +128,12 @@ public abstract class AnimatedObject extends VisualObject implements Runnable {
         }
     }
 
+    /**
+     * It draws an image of the object at the coordinates of the object.
+     * </code>
+     * 
+     * @param g Graphics object
+     */
     @Override
     public synchronized void drawObject(Graphics g) {
         g.drawImage(AnimatedObject.objectImages[this.objectType.ordinal()], coordinates.getX(), coordinates.getY(),
@@ -119,8 +141,15 @@ public abstract class AnimatedObject extends VisualObject implements Runnable {
                 sizeImage, null);
     }
 
+    /**
+     * This function is called by the thread to update the game state.
+     */
     protected abstract void update() throws InterruptedException;
 
+    /**
+     * The run() function is called when the thread is started. It will keep running until the
+     * animation status is STOPPED
+     */
     @Override
     public void run() {
         // TODO Auto-generated method stub

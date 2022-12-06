@@ -1,17 +1,14 @@
 import java.awt.*;
-import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
 /*
- *	Use a JTable as a renderer for row numbers of a given main table.
- *  This table must be added to the row header of the scrollpane that
- *  contains the main table.
+ *	CLASE AUXILIAR PER AFEGIR VALOR PER DEFECTE A LES FILES DEL JTABLE
  */
 public class RowNumberTable extends JTable
-	implements ChangeListener, PropertyChangeListener, TableModelListener
+	implements ChangeListener, PropertyChangeListener
 {
 	private JTable main;
 

@@ -42,11 +42,6 @@ public class ControlPanel extends JPanel {
         bPlay.addActionListener(animationView);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        /*
-         * gbc.weightx = 1;
-         * gbc.weighty = .5;
-         */
-        // gbc.fill = GridBagConstraints.VERTICAL;
         this.add(bPlay, gbc);
 
         bPause = new JButton("PAUSE");
@@ -54,11 +49,6 @@ public class ControlPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        /*
-         * gbc.weightx = 1;
-         * gbc.weighty = .5;
-         */
-        // gbc.fill = GridBagConstraints.VERTICAL;
         this.add(bPause, gbc);
 
         bStop = new JButton("STOP");
@@ -66,11 +56,6 @@ public class ControlPanel extends JPanel {
 
         gbc.gridx = 2;
         gbc.gridy = 0;
-        /*
-         * gbc.weightx = 1;
-         * gbc.weighty = .5;
-         */
-        // gbc.fill = GridBagConstraints.VERTICAL;
         this.add(bStop, gbc);
     }
 }
